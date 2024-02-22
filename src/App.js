@@ -24,7 +24,7 @@ function App() {
     const isEmpty = Object.values(formData).some((value) => value === "");
     if (!isEmpty) {
       try {
-        const response = await fetch("http://localhost:3001/certificates", {
+        const response = await fetch("https://ass-online-certificate-editor-validator-server.vercel.app/certificates", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
