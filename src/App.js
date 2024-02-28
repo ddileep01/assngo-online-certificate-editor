@@ -24,7 +24,7 @@ function App() {
     const isEmpty = Object.values(formData).some((value) => value === "");
     if (!isEmpty) {
       try {
-        const response = await fetch("http://65.2.39.85:4200/certificates", {
+        const response = await fetch("https://good-jade-dhole-robe.cyclic.app/certificates", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
