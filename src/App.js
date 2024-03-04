@@ -24,16 +24,22 @@ function App() {
     const isEmpty = Object.values(formData).some((value) => value === "");
     if (!isEmpty) {
       try {
-        const response = await fetch("https://good-jade-dhole-robe.cyclic.app/certificates", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "https://good-jade-dhole-robe.cyclic.app/certificates",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
         if (response.ok) {
           const data = await response.json();
-          setGeneratedCertificate(formData);
+          setGeneratedCertificate({
+            ...formData,
+            certId: data.certId, // Assuming certId is returned from backend
+          });
           // Optionally, you can clear the form data here
           setFormData({
             name: "",
@@ -167,6 +173,9 @@ function App() {
             </li>
             <li>
               <strong>Email Address:</strong> {generatedCertificate.email}
+            </li>
+            <li>
+              <strong>Certificate ID:</strong> {generatedCertificate.certId}
             </li>
           </ul>
         </div>
