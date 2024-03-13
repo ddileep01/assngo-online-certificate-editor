@@ -5,6 +5,14 @@ const ValidatePage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [id, setId] = useState("");
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const validateCertificate = async () => {
     try {
       const response = await fetch(
@@ -77,11 +85,11 @@ const ValidatePage = () => {
               </p>
               <p>
                 <span className="font-medium">From Date:</span>{" "}
-                {certificateInfo.fromDate}
+                {formatDate(certificateInfo.fromDate)}
               </p>
               <p>
                 <span className="font-medium">To Date:</span>{" "}
-                {certificateInfo.toDate}
+                {formatDate(certificateInfo.toDate)}
               </p>
               <p>
                 <span className="font-medium">Certificate ID:</span>{" "}

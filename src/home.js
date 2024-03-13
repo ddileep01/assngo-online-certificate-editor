@@ -13,6 +13,9 @@ function Home() {
   function goToValidate() {
     navigate("/validate");
   }
+  function goToGenCertificate() {
+    navigate("/allGeneratedCertifiactes");
+  }
   const [formData, setFormData] = useState({
     name: "",
     fromDate: "",
@@ -148,9 +151,16 @@ function Home() {
         <div>
           <button
             onClick={() => goToValidate()}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="bg-blue-500 text-white ml-4 px-4 py-2 rounded-md"
           >
             Validate Certificate
+          </button>
+
+          <button
+            onClick={() => goToGenCertificate()}
+            className="bg-blue-500 text-white ml-4  mt-8 px-4 py-2 rounded-md"
+          >
+            View all Certificates
           </button>
         </div>
 
