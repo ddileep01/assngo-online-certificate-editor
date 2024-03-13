@@ -44,16 +44,16 @@ const ValidatePage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h1 className="text-center text-3xl font-extrabold text-gray-900">
+        {/* <h1 className="text-center text-2xl font-extrabold text-gray-900">
           Validation Page
-        </h1>
+        </h1> */}
         <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <div>
             <label
               htmlFor="certificateId"
               className="block text-sm font-medium text-gray-700"
             >
-              Enter Certificate ID
+              Enter Certificate ID:
             </label>
             <div className="mt-1">
               <input
@@ -61,15 +61,16 @@ const ValidatePage = () => {
                 id="certificateId"
                 value={id}
                 onChange={handleInputChange}
-                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                placeholder="Certificate ID"
+                className="shadow-sm focus:ring-green-500 focus:border-green-500 block w-full sm:text-sm border-green-300 rounded-md"
+                placeholder="e.g. 3619cc3c-dc48-47f3-8bb2-f4227c4c5a41"
+                required
               />
             </div>
           </div>
           <div className="mt-6">
             <button
               onClick={validateCertificate}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-950 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               Validate
             </button>
@@ -96,7 +97,7 @@ const ValidatePage = () => {
                 {certificateInfo.certId}
               </p>
               <p className="mt-2 text-green-600 font-medium">
-                The given certificate is valid.
+                The given Certificate ID is valid.
               </p>
             </div>
           )}
