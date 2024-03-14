@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import {
   BrowserRouter as Router,
   Route,
@@ -6,10 +8,50 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import ValidatePage from "./validate";
-import CertificatePrint from "./certificate";
+import './certificate.css';
 
 function Home() {
+  
+  // code to convert certificate into pdf
+
+  const pdfRef = useRef(null);
+
+  const downloadPDF = () => {
+    const input = pdfRef.current;
+
+    html2canvas(input)
+      .then((canvas) => {
+        console.log("Canvas generated:", canvas);
+        const imgData = canvas.toDataURL('image/png');
+        console.log("Image Data:", imgData);
+        const pdf = new jsPDF();
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297; // A4 height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save('content.pdf');
+        console.log("PDF saved successfully.");
+      })
+      .catch(error => {
+        console.error("Error generating PDF:", error);
+      });
+    
+  };
+
+  // end of pdf conversion code
+
   const navigate = useNavigate();
   function goToValidate() {
     navigate("/validate");
@@ -76,18 +118,17 @@ function Home() {
 
   return (
     <>
-      <CertificatePrint></CertificatePrint>
-      <div className="h-screen flex flex-col justify-center items-center bg-cover bg-center">
+      <div className="h-screen bg-cover bg-center">
         {/* Banner */}
         <div
-          className="w-full h-1/3 flex justify-center items-center text-center text-black bg-cover bg-center"
+          className="w-full h-1/3 text-center text-black bg-cover bg-center"
           style={{
             backgroundImage: `url("https://res.cloudinary.com/dryli2l24/image/upload/v1708189605/header_img_aizbk2.png")`,
           }}
         ></div>
 
         {/* Form and Certificate */}
-        <div className="w-full mt-16 px-4 sm:flex sm:justify-between sm:items-start">
+        <div className="flex flex-col items-center w-full mt-16 px-4">
           {/* Form */}
           <form
             className="w-full sm:w-1/4 sm:ml-16 mb-8 sm:mb-0"
@@ -95,7 +136,7 @@ function Home() {
           >
             <div className="mb-4">
               <label htmlFor="name" className="block">
-                Name of the certificate:
+                Enter Name Of The Certificant
               </label>
               <input
                 type="text"
@@ -104,11 +145,12 @@ function Home() {
                 className="w-full border border-gray-400 rounded-md p-2"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="mb-4">
               <label htmlFor="fromDate" className="block">
-                From Date:
+                From Date
               </label>
               <input
                 type="date"
@@ -117,11 +159,12 @@ function Home() {
                 className="w-full border border-gray-400 rounded-md p-2"
                 value={formData.fromDate}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="mb-4">
               <label htmlFor="toDate" className="block">
-                To Date:
+                To Date
               </label>
               <input
                 type="date"
@@ -130,11 +173,12 @@ function Home() {
                 className="w-full border border-gray-400 rounded-md p-2"
                 value={formData.toDate}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="mb-4">
               <label htmlFor="email" className="block">
-                Email Address:
+                Enter Email Address
               </label>
               <input
                 type="email"
@@ -143,52 +187,68 @@ function Home() {
                 className="w-full border border-gray-400 rounded-md p-2"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
             </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-              Generate Certificate
+            <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-full">
+              Generate Certificate 🡢
             </button>
             {/* Horizontal Line for Small Devices */}
-            <hr className="border-t border-gray-400 my-4 w-full block sm:hidden" />
+            {/* <hr className="border-t border-gray-400 my-4 w-full block sm:hidden" /> */}
           </form>
           <div>
             <button
               onClick={() => goToValidate()}
-              className="bg-blue-500 text-white ml-4 px-4 py-2 rounded-md"
+              className="bg-green-950 hover:bg-green-900 text-white ml-4 px-4 py-2"
             >
-              Validate Certificate
+              Validate Certificate ✔️
             </button>
 
             <button
               onClick={() => goToGenCertificate()}
-              className="bg-blue-500 text-white ml-4  mt-8 px-4 py-2 rounded-md"
+              className="bg-green-950 hover:bg-green-900 text-white ml-4  mt-8 px-4 py-2"
             >
-              View all Certificates
+              History ↺
             </button>
           </div>
 
           {/* Vertical Line for Medium and Large Devices */}
-          <hr className="border-l border-gray-400 my-4 h-4/5 hidden sm:block" />
+          {/* <hr className="border-l border-gray-400 my-4 h-4/5 hidden sm:block" /> */}
 
           {/* Certificate */}
-          <div className="w-full sm:w-1/2 flex flex-col items-center justify-center">
-            <img
-              src="https://res.cloudinary.com/dryli2l24/image/upload/v1708190262/ASS_Certificate_with_stamp_nd_signs_1_sz8fke.png"
-              alt="Certificate"
-              className="w-4/5 mb-4"
-            />
-            <div className="flex justify-center mt-4">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4">
-                Download to Local
-              </button>
-              <p className="text-black text-center ml-2 mr-2 px-4 py-2">or</p>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-                Send Emails
-              </button>
-            </div>
-          </div>
+          {generatedCertificate && (
+              <div className="w-full sm:w-1/2">
+                <div ref={pdfRef}>
+                  <div className="certificate-bg-img">
+                    <p className="name-text-overlay">
+                      {generatedCertificate.name}
+                    </p>
+                    <p className="fromdate-text-overlay">
+                      {generatedCertificate.fromDate}
+                    </p>
+                    <p className="todate-text-overlay">
+                      {generatedCertificate.toDate}
+                    </p>
+                    <p className="certid-text-overlay">
+                      <a href="https://akhanda-seva-samsthan.vercel.app/validate">{generatedCertificate.certId}</a>
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-8 flex flex-col items-center">
+                  <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64">
+                    Download To Local ⬇
+                  </button>
+                  <p className="text-black text-center ml-2 mr-2 px-4 py-2">
+                    _______________or_______________
+                  </p>
+                  <button onClick={downloadPDF} className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2">
+                    Send Email ✉
+                  </button>
+                </div>
+              </div>
+          )}
         </div>
-        {generatedCertificate && (
+        {/* {generatedCertificate && (
           <div className="mt-8">
             <h2 className="text-2xl font-semibold mb-2">
               Generated Certificate:
@@ -212,7 +272,7 @@ function Home() {
               </li>
             </ul>
           </div>
-        )}
+        )} */}
       </div>
     </>
   );
