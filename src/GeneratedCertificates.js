@@ -11,8 +11,9 @@ function GeneratedCertificates() {
         );
         const data = await response.json();
         // Format date strings
-        const formattedData = data.map((certificate) => ({
+        const formattedData = data.map((certificate, index) => ({
           ...certificate,
+          serialNo: index + 1,
           fromDate: formatDate(certificate.fromDate),
           toDate: formatDate(certificate.toDate),
         }));
@@ -38,6 +39,9 @@ function GeneratedCertificates() {
           <thead>
             <tr className="bg-gray-100">
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Serial No
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Certificate ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -55,11 +59,16 @@ function GeneratedCertificates() {
             </tr>
           </thead>
           <tbody>
-            {certificates.map((certificate, index) => (
+            {certificates.map((certificate) => (
               <tr
-                key={index}
-                className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                key={certificate.certId}
+                className={
+                  certificate.serialNo % 2 === 0 ? "bg-gray-50" : "bg-white"
+                }
               >
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {certificate.serialNo}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {certificate.certId}
                 </td>
