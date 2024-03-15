@@ -14,33 +14,35 @@ function Home() {
   
   // code to convert certificate into pdf
 
-  const handleDownloadPDF = async () => {
-    const element = document.getElementById('download-pdf');
-    const opt = {
-      margin: 1,
-      filename: 'downloaded.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-    };
 
-    const pdf = await html2pdf().from(element).set(opt).save();
+const handleDownloadPDF = async () => {
+  const element = document.getElementById('download-pdf');
+  if (!element) {
+    console.error('Element not found');
+    return;
+  }
 
-    if (!pdf) {
-      console.error('Failed to generate PDF');
-      return;
-    }
-
-    // Convert PDF blob to data URL
-    const pdfBlob = await pdf.output('blob');
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-
-    // Open PDF in new tab
-    const newTab = window.open(pdfUrl, '_blank');
-    if (!newTab) {
-      console.error('Failed to open new tab');
-    }
+  const opt = {
+    margin: 1,
+    filename: 'downloaded.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
   };
+
+  // Generate PDF
+  html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+    var totalPages = pdf.internal.getNumberOfPages();
+
+    for (var i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      // Add footer or any additional content here
+    }
+  }).save().catch((error) => {
+    console.error('Failed to generate PDF', error);
+  });
+};
+
 
   // end of pdf conversion code
 
