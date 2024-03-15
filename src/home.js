@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import html2pdf from 'html2pdf.js';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -14,40 +14,32 @@ function Home() {
   
   // code to convert certificate into pdf
 
-  const pdfRef = useRef(null);
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('download-pdf');
+    const opt = {
+      margin: 1,
+      filename: 'downloaded.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
 
-  const downloadPDF = () => {
-    const input = pdfRef.current;
+    const pdf = await html2pdf().from(element).set(opt).save();
 
-    html2canvas(input)
-      .then((canvas) => {
-        console.log("Canvas generated:", canvas);
-        const imgData = canvas.toDataURL('image/png');
-        console.log("Image Data:", imgData);
-        const pdf = new jsPDF();
-        const imgWidth = 210; // A4 width in mm
-        const pageHeight = 297; // A4 height in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
+    if (!pdf) {
+      console.error('Failed to generate PDF');
+      return;
+    }
 
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+    // Convert PDF blob to data URL
+    const pdfBlob = await pdf.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
 
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-
-        pdf.save('content.pdf');
-        console.log("PDF saved successfully.");
-      })
-      .catch(error => {
-        console.error("Error generating PDF:", error);
-      });
-    
+    // Open PDF in new tab
+    const newTab = window.open(pdfUrl, '_blank');
+    if (!newTab) {
+      console.error('Failed to open new tab');
+    }
   };
 
   // end of pdf conversion code
@@ -218,7 +210,7 @@ function Home() {
           {/* Certificate */}
           {generatedCertificate && (
               <div className="w-full sm:w-1/2">
-                <div ref={pdfRef}>
+                <div id="download-pdf">
                   <div className="certificate-bg-img">
                     <p className="name-text-overlay">
                       {generatedCertificate.name}
@@ -241,7 +233,7 @@ function Home() {
                   <p className="text-black text-center ml-2 mr-2 px-4 py-2">
                     _______________or_______________
                   </p>
-                  <button onClick={downloadPDF} className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2">
+                  <button type="button" onClick={handleDownloadPDF} className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2">
                     Send Email ✉
                   </button>
                 </div>
