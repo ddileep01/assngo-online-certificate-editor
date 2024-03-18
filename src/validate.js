@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { ClipLoader } from "react-spinners"; // Importing ClipLoader from react-spinners
 
 const ValidatePage = () => {
   const [certificateInfo, setCertificateInfo] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [id, setId] = useState("");
+  const [loading, setLoading] = useState(false); // State to track loading status
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -14,6 +16,7 @@ const ValidatePage = () => {
   };
 
   const validateCertificate = async () => {
+    setLoading(true); // Set loading to true when validation starts
     try {
       const response = await fetch(
         "https://good-jade-dhole-robe.cyclic.app/certificates"
@@ -31,6 +34,8 @@ const ValidatePage = () => {
     } catch (error) {
       setErrorMessage("Error validating certificate.");
       setCertificateInfo(null);
+    } finally {
+      setLoading(false); // Set loading to false after validation
     }
 
     // Reset the input box after validation
@@ -44,9 +49,6 @@ const ValidatePage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        {/* <h1 className="text-center text-2xl font-extrabold text-gray-900">
-          Validation Page
-        </h1> */}
         <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <div>
             <label
@@ -72,7 +74,11 @@ const ValidatePage = () => {
               onClick={validateCertificate}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-950 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
-              Validate
+              {loading ? ( // Conditional rendering of loader or button text
+                <ClipLoader size={20} color={"#fff"} loading={loading} /> // Using ClipLoader
+              ) : (
+                "Validate"
+              )}
             </button>
           </div>
           {errorMessage && (
