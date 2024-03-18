@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; // Importing ClipLoader from react-spinners
 
 function GeneratedCertificates() {
   const [certificates, setCertificates] = useState([]);
@@ -44,7 +45,11 @@ function GeneratedCertificates() {
         </Link>
       </div>
       {loading ? ( // Conditional rendering of loader
-        <div className="text-center">Loading...</div>
+        <div className="flex items-center justify-center">
+          <ClipLoader size={40} color={"#123abc"} loading={loading} />{" "}
+          {/* Using ClipLoader */}
+          <span className="ml-4">Loading...</span> {/* Text beside loader */}
+        </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="table-auto w-full border-collapse">
