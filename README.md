@@ -76,6 +76,7 @@ This web application is designed for NGOs to efficiently generate certificates f
 
 - [Contributor 1](https://github.com/ddileep01)
 - [Contributor 2](https://github.com/Ramsaiharibabu)
+- [Contributor 3](https://github.com/lakshmangithub1)
 
 ## License
 
