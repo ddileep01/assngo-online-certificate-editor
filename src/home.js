@@ -211,35 +211,55 @@ const handleDownloadPDF = async () => {
 
           {/* Certificate */}
           {generatedCertificate && (
-              <div className="w-full sm:w-1/2">
-                <div id="download-pdf">
-                  <div className="certificate-bg-img">
-                    <p className="name-text-overlay">
-                      {generatedCertificate.name}
+            <div className="w-full sm:w-1/2">
+              <div id="download-pdf">
+                <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+                  <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
+                    <h1 className="text-3xl font-semibold text-center mb-4">
+                      Certificate of Completion
+                    </h1>
+                    <p className="text-lg mb-6">This is to certify that</p>
+                    <div className="border-b border-gray-400 mb-6">
+                      <p>{generatedCertificate.name}</p>
+                    </div>
+                    <p className="text-lg mb-6">
+                      has successfully completed the course
                     </p>
-                    <p className="fromdate-text-overlay">
-                      {generatedCertificate.fromDate}
+                    <p className="text-lg mb-6 font-semibold">
+                      "Introduction to ReactJS"
                     </p>
-                    <p className="todate-text-overlay">
-                      {generatedCertificate.toDate}
+                    <p className="text-lg mb-6">
+                      Date of completion: March 20, 2024
                     </p>
-                    <p className="certid-text-overlay">
-                      <a href="https://akhanda-seva-samsthan.vercel.app/validate">{generatedCertificate.certId}</a>
-                    </p>
+                    <div className="flex justify-center">
+                      <img
+                        src="certificate_seal.png"
+                        alt="Certificate Seal"
+                        className="h-32 w-32"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="mt-8 flex flex-col items-center">
-                  <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64">
-                    Download To Local ⬇
-                  </button>
-                  <p className="text-black text-center ml-2 mr-2 px-4 py-2">
-                    _______________or_______________
-                  </p>
-                  <button type="button" onClick={handleDownloadPDF} className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2">
-                    Send Email ✉
-                  </button>
-                </div>
               </div>
+              <div className="mt-8 flex flex-col items-center">
+                <button
+                  type="button"
+                  onClick={handleDownloadPDF}
+                  className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64"
+                >
+                  Download To Local ⬇
+                </button>
+                <p className="text-black text-center ml-2 mr-2 px-4 py-2">
+                  _______________or_______________
+                </p>
+                <button
+                  type="button"
+                  className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2"
+                >
+                  Send Email ✉
+                </button>
+              </div>
+            </div>
           )}
         </div>
         {/* {generatedCertificate && (
