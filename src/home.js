@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import html2pdf from 'html2pdf.js';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -6,9 +8,44 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import ValidatePage from "./validate";
+import './certificate.css';
 
 function Home() {
+  
+  // code to convert certificate into pdf
+
+
+const handleDownloadPDF = async () => {
+  const element = document.getElementById('download-pdf');
+  if (!element) {
+    console.error('Element not found');
+    return;
+  }
+
+  const opt = {
+    margin: 1,
+    filename: 'downloaded.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+  };
+
+  // Generate PDF
+  html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+    var totalPages = pdf.internal.getNumberOfPages();
+
+    for (var i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      // Add footer or any additional content here
+    }
+  }).save().catch((error) => {
+    console.error('Failed to generate PDF', error);
+  });
+};
+
+
+  // end of pdf conversion code
+
   const navigate = useNavigate();
   function goToValidate() {
     navigate("/validate");
@@ -74,143 +111,184 @@ function Home() {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-cover bg-center">
-      {/* Banner */}
-      <div
-        className="w-full h-1/3 flex justify-center items-center text-center text-black bg-cover bg-center"
-        style={{
-          backgroundImage: `url("https://res.cloudinary.com/dryli2l24/image/upload/v1708189605/header_img_aizbk2.png")`,
-        }}
-      ></div>
+    <>
+      <div className="h-screen bg-cover bg-center">
+        {/* Banner */}
+        <div
+          className="w-full h-1/3 text-center text-black bg-cover bg-center"
+          style={{
+            backgroundImage: `url("https://res.cloudinary.com/dryli2l24/image/upload/v1708189605/header_img_aizbk2.png")`,
+          }}
+        ></div>
 
-      {/* Form and Certificate */}
-      <div className="w-full mt-16 px-4 sm:flex sm:justify-between sm:items-start">
-        {/* Form */}
-        <form
-          className="w-full sm:w-1/4 sm:ml-16 mb-8 sm:mb-0"
-          onSubmit={handleSubmit}
-        >
-          <div className="mb-4">
-            <label htmlFor="name" className="block">
-              Name of the certificate:
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="w-full border border-gray-400 rounded-md p-2"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="fromDate" className="block">
-              From Date:
-            </label>
-            <input
-              type="date"
-              id="fromDate"
-              name="fromDate"
-              className="w-full border border-gray-400 rounded-md p-2"
-              value={formData.fromDate}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="toDate" className="block">
-              To Date:
-            </label>
-            <input
-              type="date"
-              id="toDate"
-              name="toDate"
-              className="w-full border border-gray-400 rounded-md p-2"
-              value={formData.toDate}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block">
-              Email Address:
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="w-full border border-gray-400 rounded-md p-2"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-            Generate Certificate
-          </button>
-          {/* Horizontal Line for Small Devices */}
-          <hr className="border-t border-gray-400 my-4 w-full block sm:hidden" />
-        </form>
-        <div>
-          <button
-            onClick={() => goToValidate()}
-            className="bg-blue-500 text-white ml-4 px-4 py-2 rounded-md"
+        {/* Form and Certificate */}
+        <div className="flex flex-col items-center w-full mt-16 px-4">
+          {/* Form */}
+          <form
+            className="w-full sm:w-1/4 sm:ml-16 mb-8 sm:mb-0"
+            onSubmit={handleSubmit}
           >
-            Validate Certificate
-          </button>
-
-          <button
-            onClick={() => goToGenCertificate()}
-            className="bg-blue-500 text-white ml-4  mt-8 px-4 py-2 rounded-md"
-          >
-            View all Certificates
-          </button>
-        </div>
-
-        {/* Vertical Line for Medium and Large Devices */}
-        <hr className="border-l border-gray-400 my-4 h-4/5 hidden sm:block" />
-
-        {/* Certificate */}
-        <div className="w-full sm:w-1/2 flex flex-col items-center justify-center">
-          <img
-            src="https://res.cloudinary.com/dryli2l24/image/upload/v1708190262/ASS_Certificate_with_stamp_nd_signs_1_sz8fke.png"
-            alt="Certificate"
-            className="w-4/5 mb-4"
-          />
-          <div className="flex justify-center mt-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4">
-              Download to Local
+            <div className="mb-4">
+              <label htmlFor="name" className="block">
+                Enter Name Of The Certificant
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="w-full border border-gray-400 rounded-md p-2"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="fromDate" className="block">
+                From Date
+              </label>
+              <input
+                type="date"
+                id="fromDate"
+                name="fromDate"
+                className="w-full border border-gray-400 rounded-md p-2"
+                value={formData.fromDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="toDate" className="block">
+                To Date
+              </label>
+              <input
+                type="date"
+                id="toDate"
+                name="toDate"
+                className="w-full border border-gray-400 rounded-md p-2"
+                value={formData.toDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="email" className="block">
+                Enter Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="w-full border border-gray-400 rounded-md p-2"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-full">
+              Generate Certificate 🡢
             </button>
-            <p className="text-black text-center ml-2 mr-2 px-4 py-2">or</p>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-              Send Emails
+            {/* Horizontal Line for Small Devices */}
+            {/* <hr className="border-t border-gray-400 my-4 w-full block sm:hidden" /> */}
+          </form>
+          <div>
+            <button
+              onClick={() => goToValidate()}
+              className="bg-green-950 hover:bg-green-900 text-white ml-4 px-4 py-2"
+            >
+              Validate Certificate ✔️
+            </button>
+
+            <button
+              onClick={() => goToGenCertificate()}
+              className="bg-green-950 hover:bg-green-900 text-white ml-4  mt-8 px-4 py-2"
+            >
+              History ↺
             </button>
           </div>
+
+          {/* Vertical Line for Medium and Large Devices */}
+          {/* <hr className="border-l border-gray-400 my-4 h-4/5 hidden sm:block" /> */}
+
+          {/* Certificate */}
+          {generatedCertificate && (
+            <div className="w-full sm:w-1/2">
+              <div id="download-pdf">
+                <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+                  <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
+                    <h1 className="text-3xl font-semibold text-center mb-4">
+                      Certificate of Completion
+                    </h1>
+                    <p className="text-lg mb-6">This is to certify that</p>
+                    <div className="border-b border-gray-400 mb-6">
+                      <p>{generatedCertificate.name}</p>
+                    </div>
+                    <p className="text-lg mb-6">
+                      has successfully completed the course
+                    </p>
+                    <p className="text-lg mb-6 font-semibold">
+                      "Introduction to ReactJS"
+                    </p>
+                    <p className="text-lg mb-6">
+                      Date of completion: March 20, 2024
+                    </p>
+                    <div className="flex justify-center">
+                      <img
+                        src="certificate_seal.png"
+                        alt="Certificate Seal"
+                        className="h-32 w-32"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 flex flex-col items-center">
+                <button
+                  type="button"
+                  onClick={handleDownloadPDF}
+                  className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64"
+                >
+                  Download To Local ⬇
+                </button>
+                <p className="text-black text-center ml-2 mr-2 px-4 py-2">
+                  _______________or_______________
+                </p>
+                <button
+                  type="button"
+                  className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2"
+                >
+                  Send Email ✉
+                </button>
+              </div>
+            </div>
+          )}
         </div>
+        {/* {generatedCertificate && (
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold mb-2">
+              Generated Certificate:
+            </h2>
+            <ul>
+              <li>
+                <strong>Name of the certificate:</strong>{" "}
+                {generatedCertificate.name}
+              </li>
+              <li>
+                <strong>From Date:</strong> {generatedCertificate.fromDate}
+              </li>
+              <li>
+                <strong>To Date:</strong> {generatedCertificate.toDate}
+              </li>
+              <li>
+                <strong>Email Address:</strong> {generatedCertificate.email}
+              </li>
+              <li>
+                <strong>Certificate ID:</strong> {generatedCertificate.certId}
+              </li>
+            </ul>
+          </div>
+        )} */}
       </div>
-      {generatedCertificate && (
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-2">
-            Generated Certificate:
-          </h2>
-          <ul>
-            <li>
-              <strong>Name of the certificate:</strong>{" "}
-              {generatedCertificate.name}
-            </li>
-            <li>
-              <strong>From Date:</strong> {generatedCertificate.fromDate}
-            </li>
-            <li>
-              <strong>To Date:</strong> {generatedCertificate.toDate}
-            </li>
-            <li>
-              <strong>Email Address:</strong> {generatedCertificate.email}
-            </li>
-            <li>
-              <strong>Certificate ID:</strong> {generatedCertificate.certId}
-            </li>
-          </ul>
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 

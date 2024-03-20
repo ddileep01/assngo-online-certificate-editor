@@ -1,0 +1,52 @@
+.certificate-bg-img {
+  background-image: url("https://i.ibb.co/xjHRKCt/ASS-Certificate-with-stamp-nd-signs-edited.png");
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  padding: 200px;
+  /* max-width: 100%; */
+}
+
+.name-text-overlay {
+  position: absolute;
+  top: 134%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.fromdate-text-overlay {
+  position: absolute;
+  top: 139.5%;
+  left: 56%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.todate-text-overlay {
+  position: absolute;
+  top: 139.5%;
+  left: 61.5%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.certid-text-overlay {
+  position: absolute;
+  top: 160.7%;
+  left: 63.9%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 6px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
