@@ -229,10 +229,11 @@ const handleDownloadPDF = async () => {
                       the highest appreciation, on behalf of AKHANDA SEVA
                       SAMSTHAN to
                     </p>
-                    <p className="name font-bold">{generatedCertificate.name}</p>
+                    <p className="name font-bold"><u>{generatedCertificate.name}</u></p>
                     <p className="content">
                       For dedicating his/her selfless service from {generatedCertificate.fromDate}{" "}
                       to {generatedCertificate.toDate}
+                      <br />
                       towards the organization through thick and thin.
                     </p>
                     <p className="content">
