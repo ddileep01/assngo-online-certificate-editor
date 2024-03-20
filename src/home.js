@@ -213,31 +213,53 @@ const handleDownloadPDF = async () => {
           {generatedCertificate && (
             <div className="w-full sm:w-1/2">
               <div id="download-pdf">
-                <div className="bg-gray-100 min-h-screen flex justify-center items-center">
-                  <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full md:w-3/4 lg:w-2/3 xl:w-1/2">
-                    <h1 className="text-3xl font-semibold text-center mb-4">
-                      Certificate of Completion
-                    </h1>
-                    <p className="text-lg mb-6">This is to certify that</p>
-                    <div className="border-b border-gray-400 mb-6">
-                      <p>{generatedCertificate.name}</p>
+                <div className="certificate-container">
+                  <div className="header">
+                    <h1 className="title">AKHANDA SEVA SAMSTHAN</h1>
+                    <p className="subtitle">NON-GOVERNMENT ORGANIZATION</p>
+                    <p className="registration">
+                      (REGISTERED BY GOV OF AP REGISTER NO:1/2021)
+                    </p>
+                  </div>
+
+                  <div className="body">
+                    <h2 className="body-title">CERTIFICATE OF APPRECIATION</h2>
+                    <p className="content">
+                      With a deep sense of gratitude, we would like to extend
+                      the highest appreciation, on behalf of AKHANDA SEVA
+                      SAMSTHAN to
+                    </p>
+                    <p className="name font-bold">{generatedCertificate.name}</p>
+                    <p className="content">
+                      For dedicating his/her selfless service from {generatedCertificate.fromDate}{" "}
+                      to {generatedCertificate.toDate}
+                      towards the organization through thick and thin.
+                    </p>
+                    <p className="content">
+                      Please accept this token of gratitude for your remarkable
+                      efforts.
+                    </p>
+                  </div>
+
+                  <div className="footer">
+                    <div className="official">
+                      <p className="official-title">A SEVA SAMSTHAN</p>
+                      <p className="official-name">k. Gummidy</p>
                     </div>
-                    <p className="text-lg mb-6">
-                      has successfully completed the course
-                    </p>
-                    <p className="text-lg mb-6 font-semibold">
-                      "Introduction to ReactJS"
-                    </p>
-                    <p className="text-lg mb-6">
-                      Date of completion: March 20, 2024
-                    </p>
-                    <div className="flex justify-center">
-                      <img
-                        src="certificate_seal.png"
-                        alt="Certificate Seal"
-                        className="h-32 w-32"
-                      />
+                    <div className="official">
+                      <p className="official-title">PRESIDENT</p>
+                      <p className="official-name">Kolusu Gowri Naidu</p>
+                      <p className="official-id">Read. No. 01/2021</p>
                     </div>
+                    <div className="official">
+                      <p className="official-title">VICE-PRESIDENT</p>
+                      <p className="official-name">Rayapureddy Dayakar</p>
+                    </div>
+                  </div>
+
+                  <div className="contact">
+                    <p>akhandasevasamsthan.ass@gmail.com</p>
+                    <p>CERTIFICATE ID: {generatedCertificate.certId}</p>
                   </div>
                 </div>
               </div>
