@@ -88,17 +88,19 @@ const handleDownloadPDF = async () => {
         );
         if (response.ok) {
           const data = await response.json();
-          setGeneratedCertificate({
-            ...formData,
-            certId: data.certId, // Assuming certId is returned from backend
-          });
+          // setGeneratedCertificate({
+          //   ...formData,
+          //   certId: data.certId, // Assuming certId is returned from backend
+          // });
           // Optionally, you can clear the form data here
+          navigate("/certificateview", { state: { datas:formData, certId:data.certId } } );
           setFormData({
             name: "",
             fromDate: "",
             toDate: "",
             email: "",
-          });
+          }); 
+
         } else {
           throw new Error("Failed to add certificate");
         }
@@ -184,7 +186,7 @@ const handleDownloadPDF = async () => {
                 required
               />
             </div>
-            <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-full">
+            <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-full" type="submit">
               Generate Certificate 🡢
             </button>
             {/* Horizontal Line for Small Devices */}
@@ -210,7 +212,7 @@ const handleDownloadPDF = async () => {
           {/* <hr className="border-l border-gray-400 my-4 h-4/5 hidden sm:block" /> */}
 
           {/* Certificate */}
-          {generatedCertificate && (
+          {/* {generatedCertificate && (
             <div className="w-full sm:w-1/2">
               <div id="download-pdf">
                 <div className="certificate-container">
@@ -226,8 +228,10 @@ const handleDownloadPDF = async () => {
                     <h2 className="body-title">CERTIFICATE OF APPRECIATION</h2>
                     <p className="content">
                       With a deep sense of gratitude, we would like to extend
-                      the highest appreciation, on behalf of AKHANDA SEVA
-                      SAMSTHAN to
+                      the highest appreciation, 
+                      <br />
+                      on behalf of <span style={{fontWeight:"bold"}}>AKHANDA SEVA
+                      SAMSTHAN</span> to
                     </p>
                     <p className="name font-bold"><u>{generatedCertificate.name}</u></p>
                     <p className="content">
@@ -283,7 +287,7 @@ const handleDownloadPDF = async () => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
         {/* {generatedCertificate && (
           <div className="mt-8">
