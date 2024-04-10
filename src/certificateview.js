@@ -1,4 +1,5 @@
 import React from "react";
+import html2pdf from 'html2pdf.js';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import './certificate.css';
@@ -8,28 +9,36 @@ const CertificateView = ({ generatedCertificate }) => {
     const location = useLocation();
   const props = location.state;
   console.log("data", props.datas)
-  const handleDownloadPDF = () => {
-    const certificateContainer = document.getElementById(
-      "certificate-container"
-    );
-
-    html2canvas(certificateContainer, { scrollX: 0, scrollY: 0 }, {useCORS: true}).then(
-      (canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("landscape", "mm", "a4"); // Set orientation to landscape
-        const imgWidth = 297; // A4 width in landscape mode
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        // Calculate vertical position for centering
-        const yPos = (pdf.internal.pageSize.height - imgHeight) / 2;
-
-        // Add the image to the PDF and position it
-        pdf.addImage(imgData, "PNG", 0, yPos, imgWidth, imgHeight);
-        pdf.save("ass_certificate.pdf");
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('download-pdf');
+    if (!element) {
+      console.error('Element not found');
+      return;
+    }
+  
+    const opt = {
+      margin: 0,
+      filename: 'downloaded.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }, // Change orientation to landscape
+    };
+  
+    // Generate PDF
+    html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+      var totalPages = pdf.internal.getNumberOfPages();
+  
+      for (var i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        // Add footer or any additional content here
       }
-    );
-
+    }).save().catch((error) => {
+      console.error('Failed to generate PDF', error);
+    });
   };
+  
+
+
 
   return (
     <div className="w-full mt-5">
@@ -72,7 +81,7 @@ const CertificateView = ({ generatedCertificate }) => {
               to
             </p>
             <p className="name font-bold">{props.datas.name}</p>
-            <hr className="hr-style-name" />
+            {/* <hr className="hr-style-name" /> */}
 
             <p className="content">
               For dedicating his/her selfless service from{" "}
