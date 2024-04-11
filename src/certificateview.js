@@ -18,7 +18,7 @@ const CertificateView = ({ generatedCertificate }) => {
   
     const opt = {
       margin: 0,
-      filename: 'downloaded.pdf',
+      filename: 'ass-certificate.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }, // Change orientation to landscape
@@ -86,11 +86,11 @@ const CertificateView = ({ generatedCertificate }) => {
             <p className="content">
               For dedicating his/her selfless service from{" "}
               <span style={{ fontWeight: "bold", paddingRight: "4px" }}>
-                <u>{props.datas.fromDate}</u>
+                {props.datas.fromDate}
               </span>
               to{" "}
               <span style={{ fontWeight: "bold" }}>
-                <u>{props.datas.toDate}</u>
+                {props.datas.toDate}
               </span>
               <br />
               towards the organization through thick and thin.
@@ -104,7 +104,7 @@ const CertificateView = ({ generatedCertificate }) => {
             <div className="official">
               <img
                 src="https://i.ibb.co/9wPpdqC/gowri-sign.png"
-                alt="President's Signature"
+                alt="Vice President's Signature"
                 className="ml-4"
                 style={{ width: "100px", height: "auto" }}
               />
@@ -140,7 +140,7 @@ const CertificateView = ({ generatedCertificate }) => {
                 justifyContent: "center",
               }}
             >
-              <div className="mt-2 mr-2">
+              <div className="mail-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="12"
