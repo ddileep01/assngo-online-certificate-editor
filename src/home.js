@@ -192,7 +192,7 @@ function Home() {
               onClick={() => goToValidate()}
               className="bg-green-500 hover:bg-green-600 text-white mr-4 px-4 py-2 rounded-md"
             >
-              Validate Certificate ✔️
+              Validate Certificate ✔
             </button>
             <button
               onClick={() => goToGenCertificate()}
