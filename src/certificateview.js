@@ -81,7 +81,7 @@ const CertificateView = ({ generatedCertificate }) => {
               to
             </p>
             <p className="name font-bold">{props.datas.name}</p>
-            {/* <hr className="hr-style-name" /> */}
+            <hr className="hr-style-name" />
 
             <p className="content">
               For dedicating his/her selfless service from{" "}
