@@ -64,9 +64,16 @@ function Home() {
 
   // Function to handle input change
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
+  let updatedValue = value;
+
+  if (name === "name") {
+    // Capitalize the input certificant name 
+    updatedValue = value.toUpperCase();
+  }
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: updatedValue,
     });
   };
 
