@@ -124,7 +124,7 @@ function Home() {
       <div className="h-screen bg-cover bg-center">
         {/* Banner */}
         <div
-          className="w-full h-1/3 text-center text-black bg-cover bg-center"
+          className="w-full h-16 md:h-1/3 text-center text-black md:bg-cover md:bg-center bg-top bg-contain bg-no-repeat"
           style={{
             backgroundImage: `url("https://res.cloudinary.com/dryli2l24/image/upload/v1708189605/header_img_aizbk2.png")`,
           }}
