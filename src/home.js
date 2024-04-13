@@ -1,6 +1,4 @@
 import React, { useState, useRef } from "react";
-import html2pdf from 'html2pdf.js';
-
 import {
   BrowserRouter as Router,
   Route,
@@ -8,48 +6,18 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
-import './certificate.css';
+import { ClipLoader } from "react-spinners";
+import "./certificate.css";
 
 function Home() {
-  
-  // code to convert certificate into pdf
-
-
-// const handleDownloadPDF = async () => {
-//   const element = document.getElementById('download-pdf');
-//   if (!element) {
-//     console.error('Element not found');
-//     return;
-//   }
-
-//   const opt = {
-//     margin: 1,
-//     filename: 'downloaded.pdf',
-//     image: { type: 'jpeg', quality: 0.98 },
-//     html2canvas: { scale: 2, useCORS: true },
-//     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-//   };
-
-//   // Generate PDF
-//   html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-//     var totalPages = pdf.internal.getNumberOfPages();
-
-//     for (var i = 1; i <= totalPages; i++) {
-//       pdf.setPage(i);
-//       // Add footer or any additional content here
-//     }
-//   }).save().catch((error) => {
-//     console.error('Failed to generate PDF', error);
-//   });
-// };
-
-
-  // end of pdf conversion code
-
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  //navigating to validate page
   function goToValidate() {
     navigate("/validate");
   }
+  //navigating to certificate generation page
   function goToGenCertificate() {
     navigate("/allGeneratedCertifiactes");
   }
@@ -63,14 +31,15 @@ function Home() {
   const [generatedCertificate, setGeneratedCertificate] = useState(null);
 
   // Function to handle input change
-  const handleInputChange = (e) => {
+  const handleInputChange = (e) => { 
+    console.log("e", e.target.value)
     const { name, value } = e.target;
-  let updatedValue = value;
+    let updatedValue = value;
 
-  if (name === "name") {
-    // Capitalize the input certificant name 
-    updatedValue = value.toUpperCase();
-  }
+    if (name === "name") {
+      // Capitalize the input certificant name
+      updatedValue = value.toUpperCase();
+    }
     setFormData({
       ...formData,
       [name]: updatedValue,
@@ -82,6 +51,7 @@ function Home() {
     e.preventDefault();
     const isEmpty = Object.values(formData).some((value) => value === "");
     if (!isEmpty) {
+      setLoading(true);
       try {
         const response = await fetch(
           "https://good-jade-dhole-robe.cyclic.app/certificates",
@@ -94,21 +64,24 @@ function Home() {
           }
         );
         if (response.ok) {
+          setLoading(false);
           const data = await response.json();
           // setGeneratedCertificate({
           //   ...formData,
           //   certId: data.certId, // Assuming certId is returned from backend
           // });
           // Optionally, you can clear the form data here
-          navigate("/certificateview", { state: { datas:formData, certId:data.certId } } );
+          navigate("/certificateview", {
+            state: { datas: formData, certId: data.certId },
+          });
           setFormData({
             name: "",
             fromDate: "",
             toDate: "",
             email: "",
-          }); 
-
+          });
         } else {
+          setLoading(false);
           throw new Error("Failed to add certificate");
         }
       } catch (error) {
@@ -133,12 +106,13 @@ function Home() {
         {/* Form and Certificate */}
         <div className="flex flex-col items-center w-full mt-16 px-4">
           {/* Form */}
-          <form
-            className="w-full sm:w-1/4 sm:ml-16 mb-8 sm:mb-0"
-            onSubmit={handleSubmit}
-          >
-            <div className="mb-4">
-              <label htmlFor="name" className="block">
+          <div className="w-full sm:w-1/2 flex flex-wrap justify-center">
+            <div className="flex flex-col w-full sm:w-5/12 mb-4 mr-4">
+              <label
+                htmlFor="name"
+                className="block"
+                style={{ fontWeight: "600" }}
+              >
                 Enter Name Of The Certificant
               </label>
               <input
@@ -151,36 +125,12 @@ function Home() {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="fromDate" className="block">
-                From Date
-              </label>
-              <input
-                type="date"
-                id="fromDate"
-                name="fromDate"
-                className="w-full border border-gray-400 rounded-md p-2"
-                value={formData.fromDate}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="toDate" className="block">
-                To Date
-              </label>
-              <input
-                type="date"
-                id="toDate"
-                name="toDate"
-                className="w-full border border-gray-400 rounded-md p-2"
-                value={formData.toDate}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block">
+            <div className="flex flex-col w-full sm:w-5/12 mb-4 mr-4">
+              <label
+                htmlFor="email"
+                className="block"
+                style={{ fontWeight: "600" }}
+              >
                 Enter Email Address
               </label>
               <input
@@ -193,27 +143,69 @@ function Home() {
                 required
               />
             </div>
-            <button className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-full" type="submit">
+            <div className="flex flex-col w-full sm:w-5/12 mb-4 mr-4">
+              <label
+                htmlFor="fromDate"
+                className="block"
+                style={{ fontWeight: "600" }}
+              >
+                From Date
+              </label>
+              <input
+                type="date"
+                id="fromDate"
+                name="fromDate"
+                className="w-full border border-gray-400 rounded-md p-2"
+                value={formData.fromDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="flex flex-col w-full sm:w-5/12 mb-4 mr-4">
+              <label
+                htmlFor="toDate"
+                className="block"
+                style={{ fontWeight: "600" }}
+              >
+                To Date
+              </label>
+              <input
+                type="date"
+                id="toDate"
+                name="toDate"
+                className="w-full border border-gray-400 rounded-md p-2"
+                value={formData.toDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </div>
+          {/* Buttons Container */}
+          <div className="flex mt-4">
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white mr-4 px-4 py-2 rounded-md"
+              onClick={handleSubmit}
+            >
               Generate Certificate 🡢
             </button>
-            {/* Horizontal Line for Small Devices */}
-            {/* <hr className="border-t border-gray-400 my-4 w-full block sm:hidden" /> */}
-          </form>
-          <div>
             <button
               onClick={() => goToValidate()}
-              className="bg-green-950 hover:bg-green-900 text-white ml-4 px-4 py-2"
+              className="bg-green-500 hover:bg-green-600 text-white mr-4 px-4 py-2 rounded-md"
             >
               Validate Certificate ✔️
             </button>
-
             <button
               onClick={() => goToGenCertificate()}
-              className="bg-green-950 hover:bg-green-900 text-white ml-4  mt-8 px-4 py-2"
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md"
             >
               History ↺
             </button>
           </div>
+          {loading && (
+          <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
+            <ClipLoader size={50} color={"#123abc"} loading={loading} />
+          </div>
+        )}
         </div>
       </div>
     </>

@@ -45,7 +45,7 @@ function GeneratedCertificates() {
         </Link>
       </div>
       {loading ? ( // Conditional rendering of loader
-        <div className="flex items-center justify-center">
+        <div className="flex justify-center">
           <ClipLoader size={40} color={"#123abc"} loading={loading} />{" "}
           {/* Using ClipLoader */}
           <span className="ml-4">Loading...</span> {/* Text beside loader */}
