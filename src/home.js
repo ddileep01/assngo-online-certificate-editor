@@ -32,8 +32,7 @@ function Home() {
 
   // Function to handle input change
   const handleInputChange = (e) => { 
-    console.log("e", e.target.value)
-    const { name, value } = e.target;
+    const { name, value } = e.target; 
     let updatedValue = value;
 
     if (name === "name") {
@@ -47,7 +46,7 @@ function Home() {
   };
 
   // Function to handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
     const isEmpty = Object.values(formData).some((value) => value === "");
     if (!isEmpty) {

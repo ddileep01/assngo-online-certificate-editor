@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from  "react";
 import html2pdf from 'html2pdf.js';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -6,9 +6,8 @@ import './certificate.css';
 import { useLocation, Link } from 'react-router-dom';
 
 const CertificateView = ({ generatedCertificate }) => {
-    const location = useLocation();
+  const location = useLocation();
   const props = location.state;
-  console.log("data", props.datas)
   const handleDownloadPDF = async () => {
     const element = document.getElementById('download-pdf');
     if (!element) {
@@ -36,6 +35,14 @@ const CertificateView = ({ generatedCertificate }) => {
       console.error('Failed to generate PDF', error);
     });
   };
+  const formatDate = (dateString) => {
+    const parts = dateString.split("-");
+    const year = parts[0];
+    const month = parts[1];
+    const day = parts[2];
+    return `${day}-${month}-${year}`;
+};
+
   
 
 
@@ -86,11 +93,11 @@ const CertificateView = ({ generatedCertificate }) => {
             <p className="content">
               For dedicating his/her selfless service from{" "}
               <span style={{ fontWeight: "bold", paddingRight: "4px" }}>
-                {props.datas.fromDate}
+                {formatDate(props.datas.fromDate)}
               </span>
               to{" "}
               <span style={{ fontWeight: "bold" }}>
-                {props.datas.toDate}
+                {formatDate(props.datas.toDate)}
               </span>
               <br />
               towards the organization through thick and thin.
