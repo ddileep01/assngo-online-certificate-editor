@@ -19,7 +19,7 @@ const ValidatePage = () => {
     setLoading(true); // Set loading to true when validation starts
     try {
       const response = await fetch(
-        "https://good-jade-dhole-robe.cyclic.app/certificates"
+        "https://assngo-online-certificate-editor-validator-server-2fy21fqmv.vercel.app/certificates"
       );
       const data = await response.json();
       const certificate = data.find((cert) => cert.certId === id);

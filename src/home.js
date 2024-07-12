@@ -53,7 +53,7 @@ function Home() {
       setLoading(true);
       try {
         const response = await fetch(
-          "https://good-jade-dhole-robe.cyclic.app/certificates",
+          "https://assngo-online-certificate-editor-validator-server-2fy21fqmv.vercel.app/certificates",
           {
             method: "POST",
             headers: {

@@ -10,7 +10,7 @@ function GeneratedCertificates() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://good-jade-dhole-robe.cyclic.app/certificates"
+          "https://assngo-online-certificate-editor-validator-server-2fy21fqmv.vercel.app/certificates"
         );
         const data = await response.json();
         // Format date strings
