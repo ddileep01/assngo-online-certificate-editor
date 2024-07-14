@@ -93,7 +93,7 @@ function Home() {
 
   return (
     <>
-      <div className="h-screen bg-cover bg-center">
+      <div className="h-screen bg-cover bg-center font-figtree">
         {/* Banner */}
         <div
           className="w-full h-16 md:h-1/3 text-center text-black md:bg-cover md:bg-center bg-top bg-contain bg-no-repeat"

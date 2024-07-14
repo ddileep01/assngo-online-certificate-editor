@@ -44,7 +44,7 @@ function GeneratedCertificates() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 font-figtree">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-semibold">Generated Certificates</h1>
         <Link to="/" className="text-blue-500 hover:underline">
