@@ -5,6 +5,7 @@ import { ClipLoader } from "react-spinners"; // Importing ClipLoader from react-
 function GeneratedCertificates() {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [error, setError] = useState(null); // State to track errors
 
   useEffect(() => {
     const fetchData = async () => {
@@ -12,6 +13,11 @@ function GeneratedCertificates() {
         const response = await fetch(
           "https://assngo-online-certificate-editor-validator-server-2fy21fqmv.vercel.app/certificates"
         );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         // Format date strings
         const formattedData = data.map((certificate, index) => ({
@@ -24,6 +30,7 @@ function GeneratedCertificates() {
         setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error("Error fetching data:", error);
+        setError("Error fetching data. Please try again later.");
         setLoading(false); // Set loading to false in case of error
       }
     };
@@ -33,7 +40,7 @@ function GeneratedCertificates() {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toISOString().split("T")[0];
+    return date.toLocaleDateString(); // Example: "7/14/2024"
   };
 
   return (
@@ -50,6 +57,8 @@ function GeneratedCertificates() {
           {/* Using ClipLoader */}
           <span className="ml-4">Loading...</span> {/* Text beside loader */}
         </div>
+      ) : error ? (
+        <div className="text-red-500 flex justify-center items-center h-screen">{error}</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="table-auto w-full border-collapse">
