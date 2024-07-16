@@ -11,7 +11,7 @@ function GeneratedCertificates() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://assngo-online-certificate-editor-validator-server-2fy21fqmv.vercel.app/certificates"
+          "https://assngo-online-certificate-editor-validator-server.vercel.app/certificates"
         );
 
         if (!response.ok) {
@@ -58,7 +58,9 @@ function GeneratedCertificates() {
           <span className="ml-4">Loading...</span> {/* Text beside loader */}
         </div>
       ) : error ? (
-        <div className="text-red-500 flex justify-center items-center h-screen">{error}</div>
+        <div className="text-red-500 flex justify-center items-center h-screen">
+          {error}
+        </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="table-auto w-full border-collapse">

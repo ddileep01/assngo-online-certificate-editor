@@ -31,8 +31,8 @@ function Home() {
   const [generatedCertificate, setGeneratedCertificate] = useState(null);
 
   // Function to handle input change
-  const handleInputChange = (e) => { 
-    const { name, value } = e.target; 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     let updatedValue = value;
 
     if (name === "name") {
@@ -46,14 +46,14 @@ function Home() {
   };
 
   // Function to handle form submission
-  const handleSubmit = async (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isEmpty = Object.values(formData).some((value) => value === "");
     if (!isEmpty) {
       setLoading(true);
       try {
         const response = await fetch(
-          "https://assngo-online-certificate-editor-validator-server-2fy21fqmv.vercel.app/certificates",
+          "https://assngo-online-certificate-editor-validator-server.vercel.app/certificates",
           {
             method: "POST",
             headers: {
@@ -201,10 +201,10 @@ function Home() {
             </button>
           </div>
           {loading && (
-          <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
-            <ClipLoader size={50} color={"#123abc"} loading={loading} />
-          </div>
-        )}
+            <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-50 z-50">
+              <ClipLoader size={50} color={"#123abc"} loading={loading} />
+            </div>
+          )}
         </div>
       </div>
     </>
