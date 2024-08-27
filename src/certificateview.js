@@ -54,7 +54,7 @@ const CertificateView = ({ generatedCertificate }) => {
           <div className="header">
             <div>
               <img
-                src="https://i.ibb.co/h9B75cN/ass-logo.png"
+                src="https://i.imghippo.com/files/9wQhm1724740805.png"
                 alt="logo"
                 style={{ width: "80px", height: "auto" }}
               />
