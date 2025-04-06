@@ -54,7 +54,7 @@ const CertificateView = ({ generatedCertificate }) => {
           <div className="header">
             <div>
               <img
-                src="https://i.imghippo.com/files/9wQhm1724740805.png"
+                src="/images/ass_logo.png"
                 alt="logo"
                 style={{ width: "80px", height: "auto" }}
               />
@@ -110,7 +110,7 @@ const CertificateView = ({ generatedCertificate }) => {
           <div className="footer">
             <div className="official">
               <img
-                src="https://i.ibb.co/9wPpdqC/gowri-sign.png"
+                src="/images/gowri_sign.png"
                 alt="Vice President's Signature"
                 className="ml-4"
                 style={{ width: "100px", height: "auto" }}
@@ -121,14 +121,14 @@ const CertificateView = ({ generatedCertificate }) => {
             </div>
             <div>
               <img
-                src="https://i.ibb.co/mGPqnbB/stamp.png"
+                src="/images/stamp.png"
                 alt="stamp"
                 style={{ width: "80px", height: "80px" }}
               />
             </div>
             <div className="official">
               <img
-                src="https://i.ibb.co/hC54cCw/daya-sign.png"
+                src="/images/daya_sign.png"
                 alt="President's Signature"
                 className="ml-4"
                 style={{ width: "100px", height: "auto" }}
