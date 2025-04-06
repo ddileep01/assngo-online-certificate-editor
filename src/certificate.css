@@ -3,7 +3,7 @@
 } */
 
 .certificate-container {
-  background-image: url('images/ass-cert-bg-img.jpg');
+  background-image: url('../public/images/ass-cert-bg-img.jpg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
