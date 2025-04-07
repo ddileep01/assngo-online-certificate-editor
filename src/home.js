@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { Analytics } from "@vercel/analytics/react"
 import {
   BrowserRouter as Router,
   Route,
@@ -207,6 +208,7 @@ function Home() {
           )}
         </div>
       </div>
+      <Analytics/>
     </>
   );
 }
