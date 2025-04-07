@@ -8,6 +8,8 @@ function GeneratedCertificates() {
   const [error, setError] = useState(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [certificateToDelete, setCertificateToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCertificates, setFilteredCertificates] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +30,7 @@ function GeneratedCertificates() {
           toDate: formatDate(certificate.toDate),
         }));
         setCertificates(formattedData);
+        setFilteredCertificates(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -38,6 +41,19 @@ function GeneratedCertificates() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const filtered = certificates.filter((cert) => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        cert.name?.toLowerCase().includes(searchLower) ||
+        cert.certId?.toLowerCase().includes(searchLower) ||
+        cert.fromDate?.toLowerCase().includes(searchLower) ||
+        cert.toDate?.toLowerCase().includes(searchLower)
+      );
+    });
+    setFilteredCertificates(filtered);
+  }, [searchQuery, certificates]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -63,7 +79,9 @@ function GeneratedCertificates() {
       }
 
       // Remove the certificate from the UI
-      setCertificates(certificates.filter(cert => cert.certId !== certificateToDelete.certId));
+      const updatedCertificates = certificates.filter(cert => cert.certId !== certificateToDelete.certId);
+      setCertificates(updatedCertificates);
+      setFilteredCertificates(updatedCertificates);
       setShowConfirmDialog(false);
       setCertificateToDelete(null);
     } catch (error) {
@@ -85,6 +103,17 @@ function GeneratedCertificates() {
           Back
         </Link>
       </div>
+
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search certificates by name, ID, or dates..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       {loading ? (
         <div className="flex justify-center items-center h-screen">
           <ClipLoader size={40} color={"#123abc"} loading={loading} />
@@ -123,7 +152,7 @@ function GeneratedCertificates() {
               </tr>
             </thead>
             <tbody>
-              {certificates.map((certificate) => (
+              {filteredCertificates.map((certificate) => (
                 <tr
                   key={certificate.certId}
                   className={certificate.serialNo % 2 === 0 ? "bg-gray-50" : "bg-white"}
@@ -149,10 +178,10 @@ function GeneratedCertificates() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => handleDelete(certificate)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-red-600 hover:text-red-900 flex items-center"
                     >
                       <span><svg xmlns="http://www.w3.org/2000/svg" height="12" width="10.5" viewBox="0 0 448 512"><path fill="#DC2626" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></span>
-                      {/* Delete */}
+                      Delete
                     </button>
                   </td>
                 </tr>
