@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function GeneratedCertificates() {
   const [certificates, setCertificates] = useState([]);
@@ -74,6 +76,14 @@ function GeneratedCertificates() {
         }
       );
 
+      if(response.ok){
+        toast.success('Certificate deleted successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+        });
+      }
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -87,6 +97,11 @@ function GeneratedCertificates() {
     } catch (error) {
       console.error("Error deleting certificate:", error);
       setError("Error deleting certificate. Please try again later.");
+      toast.error('Failed to delete certificate. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+      });
     }
   };
 
@@ -96,7 +111,8 @@ function GeneratedCertificates() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 font-figtree">
+    <div className="container mx-auto p-4 font-figtree">
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-semibold">Generated Certificates</h1>
         <Link to="/" className="text-blue-500 hover:underline">
