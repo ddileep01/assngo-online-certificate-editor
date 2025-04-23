@@ -168,40 +168,54 @@ function GeneratedCertificates() {
               </tr>
             </thead>
             <tbody>
-              {filteredCertificates.map((certificate) => (
-                <tr
-                  key={certificate.certId}
-                  className={certificate.serialNo % 2 === 0 ? "bg-gray-50" : "bg-white"}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {certificate.serialNo}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {certificate.certId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {certificate.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {certificate.fromDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {certificate.toDate}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {certificate.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleDelete(certificate)}
-                      className="text-red-600 hover:text-red-900 flex items-center"
-                    >
-                      <span className="mr-2"><svg xmlns="http://www.w3.org/2000/svg" height="12" width="10.5" viewBox="0 0 448 512"><path fill="#DC2626" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></span>
-                      Delete
-                    </button>
+              {filteredCertificates.length > 0 ? (
+                filteredCertificates.map((certificate) => (
+                  <tr
+                    key={certificate.certId}
+                    className={certificate.serialNo % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {certificate.serialNo}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {certificate.certId}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {certificate.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {certificate.fromDate}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {certificate.toDate}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {certificate.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleDelete(certificate)}
+                        className="text-red-600 hover:text-red-900 flex items-center"
+                      >
+                        <span className="mr-2"><svg xmlns="http://www.w3.org/2000/svg" height="12" width="10.5" viewBox="0 0 448 512"><path fill="#DC2626" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></span>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                    <div className="flex flex-col items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-lg font-medium">No results found</p>
+                      {/* <p className="text-sm mt-1">Try adjusting your search criteria</p> */}
+                    </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
