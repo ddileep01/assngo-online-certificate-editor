@@ -6,6 +6,7 @@ import GeneratedCertificates from "./GeneratedCertificates";
 import Home from "./home";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
+import NotFound from "./components/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -42,6 +43,8 @@ function App() {
               </PrivateRoute>
             }
           />
+          {/* 404 page - this must be the last route */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </AuthProvider>
