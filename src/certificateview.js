@@ -161,7 +161,7 @@ const CertificateView = ({ generatedCertificate }) => {
                 </svg>
               </div> */}
               <p>✉ akhandasevasamsthan.ass@gmail.com</p>
-              <span>|</span>
+              <span className="ml-2 mr-2">|</span>
               {/* <div className="web-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
