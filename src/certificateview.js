@@ -146,15 +146,15 @@ const CertificateView = ({ generatedCertificate }) => {
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: "6px"
               }}
             >
-              <div className="mail-icon">
+              <div style={{ display: "flex", alignItems: "center", marginRight: "5px" }}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="12"
                   width="12"
                   viewBox="0 0 512 512"
+                  style={{ marginTop: "1px" }}
                 >
                   <path
                     fill="#000000"
@@ -162,14 +162,15 @@ const CertificateView = ({ generatedCertificate }) => {
                   />
                 </svg>
               </div>
-              <p>akhandasevasamsthan.ass@gmail.com</p>
-              <span>|</span>
-              <div className="web-icon">
+              <p style={{ margin: "0 5px 0 0" }}>akhandasevasamsthan.ass@gmail.com</p>
+              <span style={{ margin: "0 10px" }}>|</span>
+              <div style={{ display: "flex", alignItems: "center", marginRight: "5px" }}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="12"
                   width="12"
                   viewBox="0 0 512 512"
+                  style={{ marginTop: "1px" }}
                 >
                   <path
                     fill="#000000"
@@ -177,7 +178,7 @@ const CertificateView = ({ generatedCertificate }) => {
                   />
                 </svg>
               </div>
-              <a href="https://www.akhandasevasamsthan.org/" style={{ textDecoration: "none", color: "inherit" }}>www.akhandasevasamsthan.org</a>
+              <a href="https://www.akhandasevasamsthan.org/" style={{ textDecoration: "none", color: "inherit", margin: 0 }}>www.akhandasevasamsthan.org</a>
             </div>
             <p>
               CERTIFICATE ID:{" "}
