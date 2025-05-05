@@ -4,15 +4,116 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import './certificate.css';
 import { useLocation, Link } from 'react-router-dom';
+import emailjs from 'emailjs-com';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, EMAILJS_USER_ID } from './emailjs-config';
 
 const CertificateView = ({ generatedCertificate }) => {
   const location = useLocation();
   const props = location.state;
+  const [certificateImage, setCertificateImage] = useState(null);
+  const [sending, setSending] = useState(false);
+  
+  // Function to capture certificate as image
+  const captureCertificateAsImage = async () => {
+    const element = document.getElementById('certificate-container');
+    if (!element) {
+      console.error('Certificate element not found');
+      return null;
+    }
+    
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: null
+      });
+      
+      // Convert canvas to image data URL
+      const imageDataUrl = canvas.toDataURL('image/png');
+      setCertificateImage(imageDataUrl);
+      return imageDataUrl;
+    } catch (error) {
+      console.error('Failed to capture certificate as image:', error);
+      return null;
+    }
+  };
+
+  // Function to compress image data URL to reduce size
+  const compressImage = (dataUrl, maxSizeKB = 15) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        
+        // Calculate new dimensions while maintaining aspect ratio
+        const aspectRatio = width / height;
+        
+        // Start with more aggressive quality and size reduction
+        let quality = 0.3; // Start with 30% quality
+        let iterations = 0;
+        const maxIterations = 10;
+        
+        // Start with smaller dimensions
+        width = width * 0.6;
+        height = width / aspectRatio;
+        
+        const compress = () => {
+          // Resize if needed after first quality reduction doesn't work
+          if (iterations > 2) {
+            width = width * 0.7;
+            height = width / aspectRatio;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Get compressed data URL
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+          
+          // Check size in KB
+          const sizeInKB = Math.round((compressedDataUrl.length * 3) / 4) / 1024;
+          
+          console.log(`Compression attempt ${iterations + 1}: Size = ${sizeInKB.toFixed(2)}KB, Quality = ${quality}, Dimensions = ${width}x${height}`);
+          
+          if (sizeInKB <= maxSizeKB || iterations >= maxIterations) {
+            resolve(compressedDataUrl);
+          } else {
+            // Reduce quality for next iteration
+            quality = Math.max(0.1, quality - 0.1);
+            iterations++;
+            compress();
+          }
+        };
+        
+        compress();
+      };
+      
+      img.src = dataUrl;
+    });
+  };
+
+  // Capture certificate image on component mount
+  useEffect(() => {
+    captureCertificateAsImage();
+  }, []);
+  
   const handleDownloadPDF = async () => {
     const element = document.getElementById('download-pdf');
     if (!element) {
       console.error('Element not found');
       return;
+    }
+    
+    // If we don't have the certificate image yet, capture it now
+    if (!certificateImage) {
+      await captureCertificateAsImage();
     }
   
     // Create a sanitized filename from the recipient's name
@@ -45,11 +146,132 @@ const CertificateView = ({ generatedCertificate }) => {
     const month = parts[1];
     const day = parts[2];
     return `${day}-${month}-${year}`;
-};
+  };
 
-  
+  // Example function showing how to use the certificate image
+  const logCertificateImage = () => {
+    if (!certificateImage) {
+      console.log('Certificate image not available yet');
+      return;
+    }
+    
+    console.log('Certificate image is available for use:', certificateImage.substring(0, 50) + '...');
+    
+    // Example: You can use the image data URL directly in an img tag
+    // <img src={certificateImage} alt="Certificate" />
+    
+    // Example: You can send this image to a server
+    // const sendImageToServer = async () => {
+    //   try {
+    //     const response = await fetch('/api/save-certificate', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({
+    //         certificateImage,
+    //         recipientName: props.datas.name,
+    //         certificateId: props.certId
+    //       }),
+    //     });
+    //     const data = await response.json();
+    //     console.log('Server response:', data);
+    //   } catch (error) {
+    //     console.error('Error sending image to server:', error);
+    //   }
+    // };
+  };
 
+  // You can call this function when needed
+  useEffect(() => {
+    if (certificateImage) {
+      logCertificateImage();
+    }
+  }, [certificateImage]);
 
+  const handleSendEmail = async () => {
+    // Check if we have the recipient's email
+    if (!props.datas.email) {
+      toast.error('Recipient email is required!');
+      return;
+    }
+
+    // Make sure we have the certificate image
+    let imageToSend = certificateImage;
+    if (!imageToSend) {
+      toast.info('Generating certificate image...');
+      imageToSend = await captureCertificateAsImage();
+      if (!imageToSend) {
+        toast.error('Failed to generate certificate image!');
+        return;
+      }
+    }
+
+    setSending(true);
+    toast.info('Preparing email...');
+
+    try {
+      // Compress the image to ensure it's under 15KB (well under the 50KB limit)
+      const compressedImage = await compressImage(imageToSend);
+      toast.info('Sending email...');
+
+      // Get recipient email from props
+      const recipientEmail = props.datas.email;
+      console.log('Sending email to:', recipientEmail);
+
+      // Create a personalized message
+      const personalizedMessage = `Dear ${props.datas.name},
+
+Please find attached your Certificate of Appreciation from Akhanda Seva Samsthan.
+
+Certificate ID: ${props.certId}
+Service Period: ${formatDate(props.datas.fromDate)} to ${formatDate(props.datas.toDate)}
+
+Thank you for your dedicated service!
+
+Please find your certificate attached below, for original PDF format file, please contact our admin at ✉️ Email id: akhandasevasamsthan.ass@gmail.com
+
+📞 Cell: +91 97046 01395, +91 81436 60501
+
+Best regards,
+Akhanda Seva Samsthan Team.`;
+
+      // Prepare the email parameters with only the necessary fields
+      const templateParams = {
+        'to_email': recipientEmail,
+        'to_name': props.datas.name,
+        'personalizedMessage': personalizedMessage,
+        'certificate_image': compressedImage
+      };
+
+      console.log('Email template params size (approx):', 
+        Math.round((JSON.stringify(templateParams).length * 3) / 4) / 1024, 'KB');
+
+      // Send the email using EmailJS
+      const response = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_USER_ID
+      );
+
+      console.log('Email sent successfully:', response);
+      toast.success('Certificate sent to recipient\'s email!');
+    } catch (error) {
+      console.error('Error sending email:', error);
+      
+      // Provide more specific error messages based on the error
+      if (error.text) {
+        toast.error(`Failed to send email: ${error.text}`);
+      } else if (error.message) {
+        toast.error(`Failed to send email: ${error.message}`);
+      } else {
+        toast.error('Failed to send email! Please check your EmailJS configuration.');
+      }
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <div className="w-full mt-5">
@@ -160,7 +382,7 @@ const CertificateView = ({ generatedCertificate }) => {
                 >
                   <path
                     fill="#000000"
-                    d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"
+                    d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"
                   />
                 </svg>
               </div> */}
@@ -205,14 +427,17 @@ const CertificateView = ({ generatedCertificate }) => {
         </p>
         <button
           type="button"
+          onClick={handleSendEmail}
+          disabled={sending}
           className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2"
         >
-          Send Email ✉
+          {sending ? 'Sending...' : 'Send Email ✉'}
         </button>
         <Link to="/" className="bg-green-950 hover:bg-green-900 text-white px-4 py-2 w-64 mt-2 mb-2">
           Back to Generate Certificate
         </Link>
       </div>
+      <ToastContainer />
     </div>
   );
 };
