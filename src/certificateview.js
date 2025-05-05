@@ -15,9 +15,13 @@ const CertificateView = ({ generatedCertificate }) => {
       return;
     }
   
+    // Create a sanitized filename from the recipient's name
+    const recipientName = props.datas.name + '_ass_certificate_of_appreciation' || 'ass_certificate_of_appreciation';
+    const sanitizedName = recipientName.replace(/[^a-zA-Z0-9]/g, '_');
+    
     const opt = {
       margin: 0,
-      filename: 'ass-certificate.pdf',
+      filename: `${sanitizedName}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }, // Change orientation to landscape
