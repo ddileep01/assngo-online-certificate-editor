@@ -241,7 +241,13 @@ Akhanda Seva Samsthan Team.`;
         'to_email': recipientEmail,
         'to_name': props.datas.name,
         'personalizedMessage': personalizedMessage,
-        'certificate_image': compressedImage
+        'certificate_image': compressedImage,
+        // Add additional recipient email parameters that EmailJS might be looking for
+        'recipient': recipientEmail,
+        'email': recipientEmail,
+        'reply_to': recipientEmail,
+        'user_email': recipientEmail,
+        'destination': recipientEmail
       };
 
       console.log('Email template params size (approx):', 
