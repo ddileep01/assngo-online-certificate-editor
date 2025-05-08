@@ -156,30 +156,6 @@ const CertificateView = ({ generatedCertificate }) => {
     }
     
     console.log('Certificate image is available for use:', certificateImage.substring(0, 50) + '...');
-    
-    // Example: You can use the image data URL directly in an img tag
-    // <img src={certificateImage} alt="Certificate" />
-    
-    // Example: You can send this image to a server
-    // const sendImageToServer = async () => {
-    //   try {
-    //     const response = await fetch('/api/save-certificate', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({
-    //         certificateImage,
-    //         recipientName: props.datas.name,
-    //         certificateId: props.certId
-    //       }),
-    //     });
-    //     const data = await response.json();
-    //     console.log('Server response:', data);
-    //   } catch (error) {
-    //     console.error('Error sending image to server:', error);
-    //   }
-    // };
   };
 
   // You can call this function when needed
@@ -229,9 +205,11 @@ Service Period: ${formatDate(props.datas.fromDate)} to ${formatDate(props.datas.
 
 Thank you for your dedicated service!
 
-Please find your certificate attached below, for original PDF format file, please contact our admin at ✉️ Email id: akhandasevasamsthan.ass@gmail.com
+ℹ️ For original PDF file format, please contact our admin at ✉️ Email id: akhandasevasamsthan.ass@gmail.com
 
 📞 Cell: +91 97046 01395, +91 81436 60501
+
+Your support can be the catalyst for transformative change. Consider making a donation to Akhanda Seva Samsthan and help us fund vital projects that uplift communities. Every contribution, no matter the size, contributes to our collective efforts in creating a more equitable and sustainable world.
 
 Best regards,
 Akhanda Seva Samsthan Team.`;
