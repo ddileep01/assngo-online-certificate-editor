@@ -15,7 +15,19 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <ToastContainer />
+        <ToastContainer 
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          toastClassName="fade-in"
+        />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/validate" element={<ValidatePage />} />

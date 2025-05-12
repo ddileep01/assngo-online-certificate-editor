@@ -11,7 +11,10 @@
   height: 170mm; /* A4 height in landscape mode */
   padding: 7mm; /* Adjust padding as needed */
   box-sizing: border-box;
- 
+  position: relative;
+  z-index: 1;
+  background-color: white !important; /* Force white background */
+  color: #1d4141 !important; /* Ensure text is visible */
 }
 
 /* .w-32 border-t-1 border-black mx-auto */
