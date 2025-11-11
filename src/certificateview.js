@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from  "react";
+import React, {useState, useEffect, useCallback} from  "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import './certificate.css';
@@ -222,14 +222,14 @@ const CertificateView = ({ generatedCertificate }) => {
   };
 
   // Example function showing how to use the certificate image
-  const logCertificateImage = () => {
+  const logCertificateImage = useCallback(() => {
     if (!certificateImage) {
       console.log('Certificate image not available yet');
       return;
     }
     
     console.log('Certificate image is available for use:', certificateImage.substring(0, 50) + '...');
-  };
+  }, [certificateImage]);
 
   // You can call this function when needed
   useEffect(() => {
