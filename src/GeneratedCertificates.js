@@ -14,6 +14,8 @@ function GeneratedCertificates() {
   const [certificateToDelete, setCertificateToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCertificates, setFilteredCertificates] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +59,20 @@ function GeneratedCertificates() {
       );
     });
     setFilteredCertificates(filtered);
+    setCurrentPage(1); // Reset to first page when search changes
   }, [searchQuery, certificates]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCertificates.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentCertificates = filteredCertificates.slice(startIndex, endIndex);
+
+  // Update serial numbers for current page
+  const paginatedCertificates = currentCertificates.map((cert, index) => ({
+    ...cert,
+    serialNo: startIndex + index + 1
+  }));
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -204,8 +219,8 @@ function GeneratedCertificates() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredCertificates.length > 0 ? (
-                      filteredCertificates.map((certificate) => (
+                    {paginatedCertificates.length > 0 ? (
+                      paginatedCertificates.map((certificate) => (
                         <tr key={certificate.certId}>
                           <td>{certificate.serialNo}</td>
                           <td>
@@ -250,6 +265,84 @@ function GeneratedCertificates() {
                 </table>
               </div>
             )}
+
+            {/* Pagination Controls */}
+              {filteredCertificates.length > 0 && (
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                  {/* Items per page selector */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600">Show:</span>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                      className="form-input py-1 px-2 text-sm"
+                    >
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                    </select>
+                    <span className="text-sm text-gray-600">entries</span>
+                  </div>
+
+                  {/* Page info */}
+                  <div className="text-sm text-gray-600">
+                    Showing {startIndex + 1} to {Math.min(endIndex, filteredCertificates.length)} of {filteredCertificates.length} entries
+                  </div>
+
+                  {/* Pagination buttons */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="button button-secondary button-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    
+                    {/* Page numbers */}
+                    <div className="flex gap-1">
+                      {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`px-3 py-1 text-sm rounded ${
+                              currentPage === pageNum
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="button button-secondary button-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
 
             {/* Confirmation Dialog */}
             {showConfirmDialog && (
