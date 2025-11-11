@@ -1,10 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Analytics } from "@vercel/analytics/react"
 import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Routes,
   useNavigate,
 } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
@@ -37,7 +33,6 @@ function Home() {
     email: "",
   });
 
-  const [generatedCertificate, setGeneratedCertificate] = useState(null);
 
   // Function to handle input change
   const handleInputChange = (e) => {

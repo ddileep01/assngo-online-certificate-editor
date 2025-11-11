@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from  "react";
-import html2pdf from 'html2pdf.js';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import './certificate.css';
 import './App.css';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import emailjs from 'emailjs-com';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -237,7 +236,7 @@ const CertificateView = ({ generatedCertificate }) => {
     if (certificateImage) {
       logCertificateImage();
     }
-  }, [certificateImage]);
+  }, [certificateImage, logCertificateImage]);
 
   const handleSendEmail = async () => {
     // Check if we have the recipient's email
@@ -331,9 +330,6 @@ Akhanda Seva Samsthan Team.`;
     }
   };
 
-  const goToHome = () => {
-    navigate("/");
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
